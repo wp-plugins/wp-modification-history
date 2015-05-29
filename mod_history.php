@@ -41,6 +41,9 @@ class ModHistory {
 				) $charset_collate;";
 		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 		dbDelta( $sql );
+
+		// Apply filter to allow developers to change the default post types that are enabled on install
+		$this->post_types = empty( $this->post_types ) ? apply_filters( 'wp_mods_post_types_enabled', $this->post_types ) : $this->post_types;
 	}
 
 	/**
@@ -67,8 +70,6 @@ class ModHistory {
 	function metaboxes() {
 		if ( $this->post_types_check() ) {
 			add_meta_box( 'wp_modification_history', __( 'Modification History', 'wp-mod-history' ), array( $this, 'wp_modification_history' ), null );
-		} else {
-			wp_die( 'oh noes!' );
 		}
 	}
 
