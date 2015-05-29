@@ -18,7 +18,7 @@ class ModHistory {
 		add_action( 'wp_insert_post', array( $this, 'postmeta_modifications_saved' ), 99999 );
 		$this->options = get_option( 'wp_mod_history_options' );
 		$this->settings = isset( $this->options['settings'] ) ? $this->options['settings'] : array();
-		$this->post_types = isset( $this->options['post_types'] ) ? $this->options['post_types'] : array();
+		$this->post_types = isset( $this->options['post_types'] ) ? $this->options['post_types'] : array( 'post', 'page' );
 	}
 
 	/**
@@ -339,7 +339,7 @@ class ModHistory {
 	 */
 	private function post_types_check() {
 		$screen = get_current_screen();
-		if ( is_object( $screen ) && in_array( $screen->post_type, $this->options['post_types'] ) ) {
+		if ( is_object( $screen ) && in_array( $screen->post_type, $this->post_types ) ) {
 			return true;
 		}
 		return false;
