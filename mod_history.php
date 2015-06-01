@@ -18,7 +18,7 @@ class ModHistory {
 		add_action( 'wp_insert_post', array( $this, 'postmeta_modifications_saved' ), 99999 );
 		$this->options = get_option( 'wp_mod_history_options' );
 		$this->settings = isset( $this->options['settings'] ) ? $this->options['settings'] : array();
-		$this->post_types = isset( $this->options['post_types'] ) ? $this->options['post_types'] : array( 'post', 'page' );
+		$this->post_types = isset( $this->options['post_types'] ) ? $this->options['post_types'] : array();
 	}
 
 	/**
@@ -41,9 +41,6 @@ class ModHistory {
 				) $charset_collate;";
 		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 		dbDelta( $sql );
-
-		// Apply filter to allow developers to change the default post types that are enabled on install
-		$this->post_types = empty( $this->post_types ) ? apply_filters( 'wp_mods_post_types_enabled', $this->post_types ) : $this->post_types;
 	}
 
 	/**
@@ -339,7 +336,7 @@ class ModHistory {
 	 */
 	private function post_types_check() {
 		$screen = get_current_screen();
-		if ( is_object( $screen ) && in_array( $screen->post_type, $this->post_types ) ) {
+		if ( is_object( $screen ) && in_array( $screen->post_type, $this->options['post_types'] ) ) {
 			return true;
 		}
 		return false;
