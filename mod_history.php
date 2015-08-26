@@ -25,6 +25,7 @@ class ModHistory {
 	 * Install routine
 	 */
 	function install() {
+		wp_die('temp install test ;o');
 		// Create custom modification history table
 		global $wpdb;
 		$charset_collate = $wpdb->get_charset_collate();
